@@ -28,10 +28,13 @@ class IndicatorNames extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['indicator', 'name'], 'required'],
+            [['indicator', 'name', 'numerator', 'denominator'], 'required'],
             [['indicator'], 'string', 'max' => 45],
+            [['indicator'], 'match', 'pattern' => '/^[a-zA-Z0-9_-]+$/', 'message' =>
+                'Nazwa wskaźnika może składac się tylko ze znaków alfanumerycznych, podkreślenia i pauzy'],
             [['lang'], 'string', 'max' => 2],
-            [['name'], 'string', 'max' => 100]
+            [['name'], 'string', 'max' => 100],
+            [['numerator', 'denominator'], 'integer']
         ];
     }
 
@@ -45,11 +48,23 @@ class IndicatorNames extends \yii\db\ActiveRecord
             'indicator' => 'Indicator',
             'lang' => 'Lang',
             'name' => 'Name',
+            'numerator' => 'Licznik',
+            'denominator' => 'Mianownik'
         ];
     }
 
     public function getMaths()
     {
         return $this->hasMany(IndicatorMath::className(), ['indicator' => 'indicator']);
+    }
+
+    public function getBasicNumerator()
+    {
+        return $this->hasOne(BasicIndicators::className(), ['id' => 'numerator']);
+    }
+
+    public function getBasicDenominator()
+    {
+        return $this->hasOne(BasicIndicators::className(), ['id' => 'denominator']);
     }
 }

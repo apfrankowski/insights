@@ -2,16 +2,15 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use app\models\IndicatorNames;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\InsightsDef */
+/* @var $model app\models\BasicIndicators */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Insights Defs', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Basic Indicators', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="insights-def-view">
+<div class="basic-indicators-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -28,11 +27,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= DetailView::widget([
         'model' => $model,
-        'attributes' => array_merge([
+        'attributes' => [
+            'id',
             'name',
-            'category.name',
-            'priority',
-        ], IndicatorNames::find()->select(['indicator'])->column())
+            'description',
+        ],
     ]) ?>
 
 </div>

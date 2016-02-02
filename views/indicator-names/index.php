@@ -26,6 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'indicator',
             'lang',
             'name',
+            'basicNumerator.name',
+            'basicDenominator.name',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\IndicatorNames;
+use app\models\InsightsDef;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -63,6 +64,9 @@ class IndicatorNamesController extends Controller
         $model = new IndicatorNames();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            Yii::$app->db->createCommand()->addColumn(InsightsDef::tableName(), $model->indicator, 'decimal')->execute();
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -98,7 +102,11 @@ class IndicatorNamesController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        Yii::$app->db->createCommand()->dropColumn(InsightsDef::tableName(), $model->indicator)->execute();
+
+        $model->delete();
 
         return $this->redirect(['index']);
     }

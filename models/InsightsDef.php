@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use app\models\Categories;
+use app\models\IndicatorNames;
 
 /**
  * This is the model class for table "insights_def".
@@ -32,7 +33,7 @@ class InsightsDef extends \yii\db\ActiveRecord
             [['name', 'id_category'], 'required'],
             [['id_category', 'priority'], 'integer'],
             [['name'], 'string', 'max' => 45],
-            [['roi2benchmark', 'profit', 'income2benchmark', 'costs2benchmark'], 'integer']
+            [IndicatorNames::find()->select('indicator')->column(), 'integer']
         ];
     }
 
@@ -56,6 +57,6 @@ class InsightsDef extends \yii\db\ActiveRecord
 
     public function getContent()
     {
-        return $this->hasMany(InsightsContent::className(), ['name' => 'name']);
+        return $this->hasOne(InsightsContent::className(), ['name' => 'name']);
     }
 }
