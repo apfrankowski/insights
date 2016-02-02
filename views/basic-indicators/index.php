@@ -6,15 +6,15 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Insights Defs';
+$this->title = 'Basic Indicators';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="insights-def-index">
+<div class="basic-indicators-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Insights Def', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Basic Indicators', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -22,9 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
+            'id',
             'name',
-            'category.name',
-            'priority',
+            'description',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

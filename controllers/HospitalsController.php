@@ -3,16 +3,18 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Categories;
+use app\models\Hospitals;
+use app\models\Indicators;
+use app\models\Insights;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CategoriesController implements the CRUD actions for Categories model.
+ * HospitalsController implements the CRUD actions for Hospitals model.
  */
-class CategoriesController extends Controller
+class HospitalsController extends Controller
 {
     public function behaviors()
     {
@@ -27,13 +29,13 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Lists all Categories models.
+     * Lists all Hospitals models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Categories::find(),
+            'query' => Hospitals::find(),
         ]);
 
         return $this->render('index', [
@@ -42,7 +44,7 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Displays a single Categories model.
+     * Displays a single Hospitals model.
      * @param integer $id
      * @return mixed
      */
@@ -54,13 +56,13 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Creates a new Categories model.
+     * Creates a new Hospitals model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Categories();
+        $model = new Hospitals();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -72,7 +74,7 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Updates an existing Categories model.
+     * Updates an existing Hospitals model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -91,7 +93,7 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Deletes an existing Categories model.
+     * Deletes an existing Hospitals model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -103,16 +105,36 @@ class CategoriesController extends Controller
         return $this->redirect(['index']);
     }
 
+
     /**
-     * Finds the Categories model based on its primary key value.
+     * Generates insights for given hospital.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionInsights($id)
+    {
+        $model = $this->findModel($id);
+        $indicators = new Indicators();
+        $indicators->calculateIndicators($id);
+
+        $insights = new Insights();
+        $insights->prepareInsights($indicators->getIndicatorsArray());
+        return $this->render('insights', [
+            'model' => $model,
+            'insights' => $insights
+        ]);
+    }
+
+    /**
+     * Finds the Hospitals model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Categories the loaded model
+     * @return Hospitals the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Categories::findOne($id)) !== null) {
+        if (($model = Hospitals::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

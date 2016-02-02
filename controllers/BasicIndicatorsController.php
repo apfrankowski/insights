@@ -3,16 +3,17 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Categories;
+use app\models\BasicIndicators;
+use app\models\Hospitals;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CategoriesController implements the CRUD actions for Categories model.
+ * BasicIndicatorsController implements the CRUD actions for BasicIndicators model.
  */
-class CategoriesController extends Controller
+class BasicIndicatorsController extends Controller
 {
     public function behaviors()
     {
@@ -27,13 +28,13 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Lists all Categories models.
+     * Lists all BasicIndicators models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Categories::find(),
+            'query' => BasicIndicators::find(),
         ]);
 
         return $this->render('index', [
@@ -42,7 +43,7 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Displays a single Categories model.
+     * Displays a single BasicIndicators model.
      * @param integer $id
      * @return mixed
      */
@@ -54,15 +55,18 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Creates a new Categories model.
+     * Creates a new BasicIndicators model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Categories();
+        $model = new BasicIndicators();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->db->createCommand()
+                ->addColumn(Hospitals::tableName(), $model->name, 'decimal(12,2)')
+                ->execute();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -72,7 +76,7 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Updates an existing Categories model.
+     * Updates an existing BasicIndicators model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -91,28 +95,31 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Deletes an existing Categories model.
+     * Deletes an existing BasicIndicators model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        Yii::$app->db->createCommand()
+            ->dropColumn(Hospitals::tableName(), $model->name)
+            ->execute();
+        $model->delete();
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Categories model based on its primary key value.
+     * Finds the BasicIndicators model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Categories the loaded model
+     * @return BasicIndicators the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Categories::findOne($id)) !== null) {
+        if (($model = BasicIndicators::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

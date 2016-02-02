@@ -38,9 +38,10 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Definicje wniosków', 'url' => ['/insights-def/index']],
             ['label' => 'Definicje treści', 'url' => ['/insights-content/index']],
-            ['label' => 'Definicje wskaźników', 'url' => ['/indicator-names/index']],
-            ['label' => 'Kalkulacje wskaźników', 'url' => ['/indicator-math/index']],
-            ['label' => 'Kategorie wskaźników', 'url' => ['/categories/index']],
+            ['label' => 'Wskaźniki podstawowe', 'url' => ['/basic-indicators/index']],
+            ['label' => 'Wskaźniki złożone', 'url' => ['/indicator-names/index']],
+            ['label' => 'Rangi wskaźników', 'url' => ['/indicator-math/index']],
+            ['label' => 'Kategorie wniosków', 'url' => ['/categories/index']],
         ],
     ]);
     // echo Nav::widget([
