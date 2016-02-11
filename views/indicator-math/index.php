@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Indicator Maths';
+$this->title = 'Rangi wskaźników';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="indicator-math-index">
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Indicator Math', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Stwórz rangi wskaźnika', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'indicators.name',
             'id_hospital',
             'id_division',
+            'id_specjalizacja',
             'minus2',
             'minus1',
             'plus1',

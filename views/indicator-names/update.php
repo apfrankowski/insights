@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\IndicatorNames */
 
-$this->title = 'Update Indicator Names: ' . ' ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Indicator Names', 'url' => ['index']];
+$this->title = 'Aktualizuj wskaźnik: ' . ' ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Wskaźniki złożone', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Aktualizuj';
 ?>
 <div class="indicator-names-update">
 

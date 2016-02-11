@@ -23,10 +23,12 @@ use app\models\BasicIndicators;
 
     <?= $form->field($model, 'numerator')->dropDownList( BasicIndicators::find()->select(['name', 'id'])->indexBy('id')->column()) ?>
 
-    <?= $form->field($model, 'denominator')->dropDownList( BasicIndicators::find()->select(['name', 'id'])->indexBy('id')->column()) ?>
+    <?= $form->field($model, 'denominator')->dropDownList(  [0=> ''] + BasicIndicators::find()->select(['name', 'id'])->indexBy('id')->column()) ?>
+
+    <?= $form->field($model, 'denominator_dec')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Utwórz' : 'Aktualizuj', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -45,7 +45,20 @@ $config = [
                 // ...
             ],
         ],
-        'db' => require(__DIR__ . '/db.php'),
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=yii2basic',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+        ],
+        'dbTest' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=192.168.1.253;port=23306;dbname=Symulator',
+            'username' => 'symulator',
+            'password' => 'symSG@6711',
+            'charset' => 'utf8',
+        ],
     ],
     'params' => $params,
 ];

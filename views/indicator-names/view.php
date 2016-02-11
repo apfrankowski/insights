@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\IndicatorNames */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Indicator Names', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Wskaźniki złożone', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="indicator-names-view">
@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Aktualizuj', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Usuń', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Czy na pewno chcesz usunąć wpis?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'basicNumerator.name',
             'basicDenominator.name',
+            'denominator_dec'
         ],
     ]) ?>
 

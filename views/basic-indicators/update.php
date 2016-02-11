@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\BasicIndicators */
 
-$this->title = 'Update Basic Indicators: ' . ' ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Basic Indicators', 'url' => ['index']];
+$this->title = 'Aktualizuj wskaźnik: ' . ' ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Wskaźniki podstawowe', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>

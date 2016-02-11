@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\InsightsContent */
 
-$this->title = 'Update Insights Content: ' . ' ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Insights Contents', 'url' => ['index']];
+$this->title = 'Aktualizowanie treści: ' . ' ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Definicje treści', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Aktualizuj';
 ?>
 <div class="insights-content-update">
 

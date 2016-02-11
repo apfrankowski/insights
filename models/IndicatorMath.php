@@ -35,7 +35,8 @@ class IndicatorMath extends \yii\db\ActiveRecord
             [['indicator'], 'required'],
             [['id_hospital', 'id_division'], 'integer'],
             [['minus2', 'minus1', 'plus1', 'plus2'], 'number'],
-            [['indicator'], 'string', 'max' => 45]
+            [['indicator'], 'string', 'max' => 45],
+            [['id_specjalizacja'], 'string', 'max' => 255]
         ];
     }
 
@@ -46,9 +47,10 @@ class IndicatorMath extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'indicator' => 'Indicator',
-            'id_hospital' => 'Id Hospital',
-            'id_division' => 'Id Division',
+            'indicator' => 'Wskaźnik',
+            'id_hospital' => 'Id szpitala',
+            'id_division' => 'Id oddziału',
+            'id_specjalizacja' => 'Id specjalizacji',
             'minus2' => 'Minus2',
             'minus1' => 'Minus1',
             'plus1' => 'Plus1',

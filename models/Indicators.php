@@ -18,20 +18,30 @@ class Indicators extends Model
 
     public $indicatorsArray;
 
-    public function calculateIndicators($hospitalId)
+    public function calculateIndicators($id, $idSpec)
     {
-        $hospitalIndicators = Hospitals::find()->where(['id' => $hospitalId])->one();
+        $hospitalIndicators = Divisions::find()->where(['id' => $id])->one();
         $indicatorDefinitions = IndicatorNames::find()->all();
 
         foreach ($indicatorDefinitions as $indicator) {
 
             $numeratorName = $indicator->basicNumerator->name;
-            $denominatorName = $indicator->basicDenominator->name;
+            if ( $indicator->denominator != 0 ) {
+                $denominatorName = $indicator->basicDenominator->name;
+            }
 
-            $indicatorValue = ($hospitalIndicators->{$numeratorName} - $hospitalIndicators->{$denominatorName})
-                                / $hospitalIndicators->{$denominatorName};
+            if ( $indicator->denominator != 0 && $hospitalIndicators->{$denominatorName} != 0 ) {
+                
+                $indicatorValue = ($hospitalIndicators->{$numeratorName} - $hospitalIndicators->{$denominatorName})
+                                    / $hospitalIndicators->{$denominatorName};
+            } elseif ( $indicator->denominator_dec != 0 ) {
+                $indicatorValue = ($hospitalIndicators->{$numeratorName} - $indicator->denominator_dec)
+                                    / $indicator->denominator_dec;
+            } else {
+                $indicatorValue = $hospitalIndicators->{$numeratorName};
+            }
 
-            $this->indicatorsArray[$indicator->indicator] = Indicators::_getRank($indicator->indicator, $indicatorValue, $hospitalId);
+            $this->indicatorsArray[$indicator->indicator] = Indicators::_getRank($indicator->indicator, $indicatorValue, $id, $idSpec);
         }
     }
 
@@ -40,45 +50,55 @@ class Indicators extends Model
         return $this->indicatorsArray;
     }
 
-    private static function _getRank($indicatorName, $indicatorValue, $hospitalId)
+    private static function _getRank($indicatorName, $indicatorValue, $id, $idSpec)
     {
-        $mathRules = IndicatorMath::find()->where(['indicator' => $indicatorName])->one();
-        if ( $indicatorValue < 0 ) {
+        echo $indicatorName . " ". $indicatorValue;
+        $mathRules = IndicatorMath::find()->where(['indicator' => $indicatorName])->andWhere(['like', 'id_specjalizacja', $idSpec])->one();
 
-            if ( $indicatorValue < -$mathRules->minus2 ) {
+        if (!$mathRules) {
+            $mathRules = IndicatorMath::find()->where(['indicator' => $indicatorName])->andWhere(['id_specjalizacja' => ''])->one();
+        }
+        if ($mathRules) {
 
-                return -2;
+            if ( $indicatorValue < 0 ) {
 
-            } elseif ( $indicatorValue < -$mathRules->minus1 ) {
+                if ( isset($mathRules->minus2) && $indicatorValue < -$mathRules->minus2 ) {
 
-                return -1;
+                    return -2;
+
+                } elseif ( $indicatorValue < -$mathRules->minus1 ) {
+
+                    return -1;
+
+                } else {
+
+                    return 0;
+
+                }
+
+            } elseif ( $indicatorValue > 0 ) {
+
+                if ( isset($mathRules->plus2) && $indicatorValue > $mathRules->plus2 ) {
+
+                    return 2;
+
+                } elseif ( $indicatorValue > $mathRules->plus1 ) {
+
+                    return 1;
+
+                } else {
+
+                    return 0;
+                    
+                }
 
             } else {
 
                 return 0;
 
             }
-
-        } elseif ( $indicatorValue > 0 ) {
-
-            if ( $indicatorValue > $mathRules->plus2 ) {
-
-                return 2;
-
-            } elseif ( $indicatorValue > $mathRules->plus1 ) {
-
-                return 1;
-
-            } else {
-
-                return 0;
-                
-            }
-
         } else {
-
             return 0;
-
         }
     }
 

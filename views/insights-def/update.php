@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\InsightsDef */
 
-$this->title = 'Update Insights Def: ' . ' ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Insights Defs', 'url' => ['index']];
+$this->title = 'Aktualizowanie definicji: ' . ' ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Definicje wniosków', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Aktualizuj';
 ?>
 <div class="insights-def-update">
 

@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\BasicIndicators;
 use app\models\Hospitals;
+use app\models\Divisions;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -33,6 +34,9 @@ class BasicIndicatorsController extends Controller
      */
     public function actionIndex()
     {
+        if (\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => BasicIndicators::find(),
         ]);
@@ -49,6 +53,9 @@ class BasicIndicatorsController extends Controller
      */
     public function actionView($id)
     {
+        if (\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -61,11 +68,17 @@ class BasicIndicatorsController extends Controller
      */
     public function actionCreate()
     {
+        if (\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         $model = new BasicIndicators();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            // Yii::$app->db->createCommand()
+            //     ->addColumn(Hospitals::tableName(), $model->name, 'decimal(12,2)')
+            //     ->execute();
             Yii::$app->db->createCommand()
-                ->addColumn(Hospitals::tableName(), $model->name, 'decimal(12,2)')
+                ->addColumn(Divisions::tableName(), $model->name, 'decimal(12,2)')
                 ->execute();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -83,6 +96,9 @@ class BasicIndicatorsController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -102,9 +118,15 @@ class BasicIndicatorsController extends Controller
      */
     public function actionDelete($id)
     {
+        if (\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         $model = $this->findModel($id);
+        // Yii::$app->db->createCommand()
+        //     ->dropColumn(Hospitals::tableName(), $model->name)
+        //     ->execute();
         Yii::$app->db->createCommand()
-            ->dropColumn(Hospitals::tableName(), $model->name)
+            ->dropColumn(Divisions::tableName(), $model->name)
             ->execute();
         $model->delete();
         return $this->redirect(['index']);

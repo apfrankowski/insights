@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Hospitals;
 use app\models\Divisions;
 use app\models\Indicators;
 use app\models\Insights;
@@ -13,9 +12,9 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * HospitalsController implements the CRUD actions for Hospitals model.
+ * DivisionsController implements the CRUD actions for Hospitals model.
  */
-class HospitalsController extends Controller
+class DivisionsController extends Controller
 {
     public function behaviors()
     {
@@ -30,13 +29,15 @@ class HospitalsController extends Controller
     }
 
     /**
-     * Lists all Hospitals models.
+     * Lists all Divisions models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id_hospitals)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Hospitals::find(),
+            'query' => Divisions::find()
+                ->where(['id_szpital' => $id_hospitals])
+                ->orderBy('id')
         ]);
 
         return $this->render('index', [
@@ -45,7 +46,7 @@ class HospitalsController extends Controller
     }
 
     /**
-     * Displays a single Hospitals model.
+     * Displays a single Divisions model.
      * @param integer $id
      * @return mixed
      */
@@ -57,13 +58,13 @@ class HospitalsController extends Controller
     }
 
     /**
-     * Creates a new Hospitals model.
+     * Creates a new Divisions model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Hospitals();
+        $model = new Divisions();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -75,7 +76,7 @@ class HospitalsController extends Controller
     }
 
     /**
-     * Updates an existing Hospitals model.
+     * Updates an existing Divisions model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -91,33 +92,6 @@ class HospitalsController extends Controller
                 'model' => $model,
             ]);
         }
-    }
-
-    /**
-     * Updates an existing Hospitals model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdateData($id)
-    {
-        Yii::$app->dbTest->createCommand("CALL InsightsIndicatorsUpdate($id, 201501, 201509)")->execute();
-
-        if ($rows = Yii::$app->dbTest
-            ->createCommand('select afr.*,o.nazwa from afr_indicators afr join oddzial o on o.id=afr.id_oddzial where afr.id_szpital = '.$id)
-            ->queryAll()) {
-            foreach ($rows as $line) {
-                $division = new Divisions();
-                foreach (array_keys($line) as $key) {
-                    if ($key !== 'id') {
-                        $division->$key = $line[$key];
-                    }
-                }
-                $division->save();
-            }
-        }
-        return $this->redirect(['divisions/index', 'id_hospitals' => $id]);
-
     }
 
     /**
@@ -143,10 +117,10 @@ class HospitalsController extends Controller
     {
         $model = $this->findModel($id);
         $indicators = new Indicators();
-        $indicators->calculateIndicators($id);
+        $indicators->calculateIndicators($id, $model->id_specjalizacja);
 
         $insights = new Insights();
-        $insights->prepareInsights($indicators->getIndicatorsArray());
+        $insights->prepareInsights($id, $indicators->getIndicatorsArray());
         return $this->render('insights', [
             'model' => $model,
             'insights' => $insights
@@ -162,7 +136,7 @@ class HospitalsController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Hospitals::findOne($id)) !== null) {
+        if (($model = Divisions::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

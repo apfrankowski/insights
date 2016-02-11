@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Hospitals';
+$this->title = 'Szpitale';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="hospitals-index">
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Hospitals', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Utwórz szpital', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -22,7 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'name',
 
             ['class' => 'yii\grid\ActionColumn', 
@@ -37,8 +36,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         );
                     },
+                    'view' => function ($url, $model, $key) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            ['divisions/index', 'id_hospitals' => $model->id], 
+                            [
+                                'title' => 'Pokaż oddziały',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
+                    'update' => function ($url, $model, $key) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-refresh"></span>',
+                            ['hospitals/update-data', 'id' => $model->id], 
+                            [
+                                'title' => 'Załaduj dane',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
                 ],
-                'template' => '{view} {update} {delete} {generate}'
+                'template' => '{view} {update} {delete}'
             ],
         ],
     ]); ?>

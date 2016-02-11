@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\IndicatorNames */
 
-$this->title = 'Create Indicator Names';
-$this->params['breadcrumbs'][] = ['label' => 'Indicator Names', 'url' => ['index']];
+$this->title = 'Tworzenie wskaźnika złożonego';
+$this->params['breadcrumbs'][] = ['label' => 'Wskaźniki złożone', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="indicator-names-create">

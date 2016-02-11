@@ -28,6 +28,7 @@ class BasicIndicators extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'string', 'max' => 45],
+            [['unit'], 'string', 'max' => 45],
             [['name'], 'match', 'pattern' => '/^[a-zA-Z0-9_-]+$/', 'message' =>
                 'Nazwa wskaźnika może składac się tylko ze znaków alfanumerycznych, podkreślenia i pauzy'],
             [['description'], 'string', 'max' => 255],
@@ -42,8 +43,9 @@ class BasicIndicators extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'description' => 'Description',
+            'name' => 'Wskaźnik',
+            'description' => 'Opis',
+            'unit' => 'Jednostka'
         ];
     }
 

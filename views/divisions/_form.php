@@ -17,6 +17,13 @@ use app\models\BasicIndicators;
 
     <?= $form->field($model, 'name')->textInput() ?>
 
+    <?php foreach (BasicIndicators::find()->select(['description', 'name'])->all() as $indicator): 
+    ?>
+
+	<?= $form->field($model, $indicator->name, ['showLabels' => true])->textInput()->label($indicator->description); ?>
+
+    <?php endforeach; ?>
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Utwórz' : 'Aktualizuj', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

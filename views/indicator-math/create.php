@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\IndicatorMath */
 
-$this->title = 'Create Indicator Math';
-$this->params['breadcrumbs'][] = ['label' => 'Indicator Maths', 'url' => ['index']];
+$this->title = 'Tworzenie rang wskaźnika';
+$this->params['breadcrumbs'][] = ['label' => 'Rangi wskaźników', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="indicator-math-create">

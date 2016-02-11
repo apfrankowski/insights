@@ -57,6 +57,6 @@ class InsightsDef extends \yii\db\ActiveRecord
 
     public function getContent()
     {
-        return $this->hasOne(InsightsContent::className(), ['name' => 'name']);
+        return $this->hasMany(InsightsContent::className(), ['name' => 'name']);
     }
 }

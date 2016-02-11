@@ -33,6 +33,9 @@ class IndicatorNamesController extends Controller
      */
     public function actionIndex()
     {
+        if (\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => IndicatorNames::find(),
         ]);
@@ -49,6 +52,9 @@ class IndicatorNamesController extends Controller
      */
     public function actionView($id)
     {
+        if (\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -61,6 +67,9 @@ class IndicatorNamesController extends Controller
      */
     public function actionCreate()
     {
+        if (\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         $model = new IndicatorNames();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -83,6 +92,9 @@ class IndicatorNamesController extends Controller
      */
     public function actionUpdate($id)
     {
+        if (\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -102,6 +114,9 @@ class IndicatorNamesController extends Controller
      */
     public function actionDelete($id)
     {
+        if (\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         $model = $this->findModel($id);
 
         Yii::$app->db->createCommand()->dropColumn(InsightsDef::tableName(), $model->indicator)->execute();

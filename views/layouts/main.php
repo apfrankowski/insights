@@ -27,7 +27,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'SGA logika',
+        'brandLabel' => 'Szpitale',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -38,12 +38,31 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Definicje wniosków', 'url' => ['/insights-def/index']],
             ['label' => 'Definicje treści', 'url' => ['/insights-content/index']],
-            ['label' => 'Wskaźniki podstawowe', 'url' => ['/basic-indicators/index']],
-            ['label' => 'Wskaźniki złożone', 'url' => ['/indicator-names/index']],
-            ['label' => 'Rangi wskaźników', 'url' => ['/indicator-math/index']],
-            ['label' => 'Kategorie wniosków', 'url' => ['/categories/index']],
-        ],
+        ]
     ]);
+    if ( Yii::$app->user->isGuest ) {
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav navbar-left'],
+            'items' => [
+                ['label' => 'Login', 'url' => ['/site/login']]
+            ]
+        ]);
+    } else {
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav navbar-left'],
+            'items' => [
+                ['label' => 'Wskaźniki podstawowe', 'url' => ['/basic-indicators/index']],
+                ['label' => 'Wskaźniki złożone', 'url' => ['/indicator-names/index']],
+                ['label' => 'Rangi wskaźników', 'url' => ['/indicator-math/index']],
+                ['label' => 'Kategorie wniosków', 'url' => ['/categories/index']],
+                [
+                    'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+                    'url' => ['/site/logout'],
+                    'linkOptions' => ['data-method' => 'post']
+                ],
+            ]
+        ]);
+    }
     // echo Nav::widget([
     //     'options' => ['class' => 'navbar-nav navbar-right'],
     //     'items' => [
@@ -72,7 +91,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; SGA M.Wesołowski i ska sp.k. <?= date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

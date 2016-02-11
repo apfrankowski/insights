@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\IndicatorMath */
 
-$this->title = 'Update Indicator Math: ' . ' ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Indicator Maths', 'url' => ['index']];
+$this->title = 'Aktualizuj rangi dla wskaźnika:' . ' ' . $model->indicator;
+$this->params['breadcrumbs'][] = ['label' => 'Rangi wskaźników', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Aktualizuj';
 ?>
 <div class="indicator-math-update">
 

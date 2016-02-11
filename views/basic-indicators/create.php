@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\BasicIndicators */
 
-$this->title = 'Create Basic Indicators';
-$this->params['breadcrumbs'][] = ['label' => 'Basic Indicators', 'url' => ['index']];
+$this->title = 'Tworzenie wskaźnika podstawowego';
+$this->params['breadcrumbs'][] = ['label' => 'Wskaźniki podstawowe', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="basic-indicators-create">

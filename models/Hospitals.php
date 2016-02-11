@@ -28,8 +28,7 @@ class Hospitals extends \yii\db\ActiveRecord
         return [
             [['id', 'name'], 'required'],
             [['id'], 'integer'],
-            [['name'], 'string'],
-            [BasicIndicators::find()->select('name')->column(), 'number']
+            [['name'], 'string']
         ];
     }
 
