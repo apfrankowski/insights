@@ -12,12 +12,12 @@ use app\models\InsightsContent;
 /* @var $form yii\widgets\ActiveForm */
 
 $items = array(
-		null => 'N/D',
-		-2 => '<<',
-		-1 => '<',
-		0=> '=',
-		1 => '>',
-		2 => '>>'
+		null => '<i class="fa fa-ban"></i>',
+		-2 => '<i class="fa fa-angle-double-down"></i>',
+		-1 => '<i class="fa fa-angle-down"></i>',
+		0=> '-',
+		1 => '<i class="fa fa-angle-up"></i>',
+		2 => '<i class="fa fa-angle-double-up"></i>'
 	);
 
 ?>
@@ -40,7 +40,7 @@ $items = array(
     	// $model->{$indicator->indicator} = 'null';
     ?>
 
-	<?= $form->field($model, $indicator->indicator, ['showLabels' => true])->radioButtonGroup($items)->label($indicator->name); ?>
+	<?= $form->field($model, $indicator->indicator, ['showLabels' => true])->radioButtonGroup($items, ['class' => 'btn-group-xs'])->label($indicator->name); ?>
 
     <?php endforeach; ?>
 
