@@ -13,6 +13,10 @@ use Yii;
  */
 class Categories extends \yii\db\ActiveRecord
 {
+
+    public $indicator;
+
+    public $indicators_available;
     /**
      * @inheritdoc
      */
@@ -43,5 +47,11 @@ class Categories extends \yii\db\ActiveRecord
             'type' => 'Typ',
             'name' => 'Kategoria',
         ];
+    }
+
+    public function getIndicators()
+    {
+        return $this->hasMany(IndicatorNames::className(), ['id' => 'id_indicator_names'])
+            ->viaTable('categories_indicators', ['id_categories' => 'id']);
     }
 }

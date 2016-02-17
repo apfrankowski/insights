@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Categories;
+use app\models\CategoriesIndicators;
+use app\models\IndicatorNames;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -54,8 +56,12 @@ class CategoriesController extends Controller
         if (\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
+        $dataProvider = new ActiveDataProvider([
+            'query' => CategoriesIndicators::find()->where(['id_categories' => $id]),
+        ]);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProvider' => $dataProvider
         ]);
     }
 
@@ -70,12 +76,22 @@ class CategoriesController extends Controller
             return $this->goHome();
         }
         $model = new Categories();
+        $indicatorsAvailable = IndicatorNames::find()->select(['name', 'id'])->indexBy('id')->column();
+        $indicatorsPresent = [];
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            foreach (Yii::$app->request->post()['Categories']['indicators'] as $id_indicator) {
+                $catInd = new CategoriesIndicators();
+                $catInd->id_indicator_names = $id_indicator;
+                $catInd->id_categories = $model->id;
+                $catInd->save();
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'indicatorsAvailable' => $indicatorsAvailable,
+                'indicatorsPresent' => $indicatorsPresent
             ]);
         }
     }
@@ -93,11 +109,29 @@ class CategoriesController extends Controller
         }
         $model = $this->findModel($id);
 
+        $indicatorsAvailable = IndicatorNames::find()->select(['name', 'id'])->indexBy('id')->column();
+        $indicatorsPresent = $model->getIndicators()->select(['name', 'id'])->indexBy('id')->column();
+
+        foreach ($indicatorsPresent as $value) {
+            if(($key = array_search($value, $indicatorsAvailable)) !== false) {
+                unset($indicatorsAvailable[$key]);
+            }
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            CategoriesIndicators::deleteAll('id_categories = '.$id);
+            foreach (Yii::$app->request->post()['Categories']['indicators'] as $id_indicator) {
+                $catInd = new CategoriesIndicators();
+                $catInd->id_indicator_names = $id_indicator;
+                $catInd->id_categories = $model->id;
+                $catInd->save();
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'indicatorsAvailable' => $indicatorsAvailable,
+                'indicatorsPresent' => $indicatorsPresent
             ]);
         }
     }

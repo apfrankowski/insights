@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\InsightsContent */
 
-$this->title = 'Create Insights Content';
-$this->params['breadcrumbs'][] = ['label' => 'Insights Contents', 'url' => ['index']];
+$this->title = 'Tworzenie treści wniosku';
+$this->params['breadcrumbs'][] = ['label' => 'Definicje treści', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="insights-content-create">
