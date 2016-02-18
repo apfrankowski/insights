@@ -30,10 +30,9 @@ class InsightsContent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'content', 'usage_counter'], 'required'],
+            [['content'], 'required'],
             [['content'], 'string'],
             [['usage_counter'], 'integer'],
-            [['name'], 'string', 'max' => 45],
             [['lang'], 'string', 'max' => 2]
         ];
     }
@@ -45,7 +44,6 @@ class InsightsContent extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Nazwa wniosku',
             'lang' => 'Lang',
             'content' => 'Treść',
             'usage_counter' => 'Usage Counter',
@@ -54,6 +52,6 @@ class InsightsContent extends \yii\db\ActiveRecord
 
     public function getInsight()
     {
-        return $this->hasOne(InsightsDef::className(), ['name' => 'name']);
+        return $this->hasOne(InsightsDef::className(), ['id' => 'id_insights_def']);
     }
 }

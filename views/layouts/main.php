@@ -37,8 +37,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-left'],
         'items' => [
-            ['label' => 'Definicje wniosków', 'url' => ['/insights-def/index']],
-            ['label' => 'Definicje treści', 'url' => ['/insights-content/index']],
+            ['label' => 'Wnioski', 'url' => ['/insights-def/index']],
         ]
     ]);
     if ( Yii::$app->user->isGuest ) {

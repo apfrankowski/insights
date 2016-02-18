@@ -36,6 +36,10 @@ body {
     font-style: italic;
 }
 
+.panel {
+    margin-top: 15px;
+}
+
 /* add sorting icons to gridview sort links */
 a.asc:after, a.desc:after {
     position: relative;

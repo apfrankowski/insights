@@ -5,10 +5,14 @@ namespace app\controllers;
 use Yii;
 use app\models\InsightsDef;
 use app\models\InsightsContent;
+use app\models\IndicatorNames;
+use app\models\Categories;
+use app\models\CategoriesIndicators;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
 
 /**
  * InsightsDefController implements the CRUD actions for InsightsDef model.
@@ -59,18 +63,61 @@ class InsightsDefController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($idCategory = 4)
     {
         $model = new InsightsDef();
         $content = new InsightsContent();
+        $categories = Categories::find()->select(['name', 'id'])->indexBy('id')->column();
+        // $selectedCategory = array_keys($categories)[1];
+        $indicatorNames = CategoriesIndicators::find()->where('id_categories = '.$idCategory)->all();
+        $model->id_category = $idCategory;
+
+        $insights = InsightsDef::find()->where('id_category = '.$idCategory)->all();
+        $insightsCollection = [0 => ''];
+        foreach ($insights as $insight) {
+            $name = '';
+            foreach ($insight->toArray() as $key=>$value) {
+                if (!in_array($key, ['id', 'id_category', 'priority', 'hospitals', 'units', 'specialities']) && $value !== null) {
+                    $name .= $key.'('.$value.')';
+                }
+            }
+            $insightsCollection[$insight->id] = $name;
+        }
+
+
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $content->id_insights_def = $model->id;
+            $content->content = Yii::$app->request->post()['InsightsContent']['content'];
+            $content->lang = 'pl';
+            $content->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'content' => $content
+                'content' => $content,
+                'categories' => $categories,
+                'indicatorNames' => $indicatorNames,
+                'insights' => $insightsCollection
             ]);
+        }
+    }
+
+    public function actionGetInsights() 
+    {
+
+        if ($post = Yii::$app->request->post()) {
+            if ($post['InsightsDef']['name'] > 0) {
+                // load predefined insights
+                $model = $this->findModel($post['InsightsDef']['name']);
+                return Json::htmlEncode($model->loadInsightFromDef());
+            } else {
+                $post['InsightsDef']['name'] = '';
+                // load insights from other values
+                return Json::htmlEncode(InsightsDef::loadInsightFromValues($post['InsightsDef']));
+            }
+        } else {
+            return $this->redirect(['create']);
         }
     }
 

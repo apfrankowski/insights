@@ -3,8 +3,6 @@
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
 use kartik\touchspin\TouchSpin;
-use app\models\IndicatorNames;
-use app\models\Categories;
 use app\models\InsightsContent;
 
 /* @var $this yii\web\View */
@@ -19,30 +17,90 @@ $items = array(
 		1 => '<i class="fa fa-angle-up"></i>',
 		2 => '<i class="fa fa-angle-double-up"></i>'
 	);
-
+$counter = 0;
 ?>
 
 <div class="insights-def-form">
 
     <?php $form = ActiveForm::begin([
-    	'type' => ActiveForm::TYPE_HORIZONTAL
+    	'type' => ActiveForm::TYPE_HORIZONTAL,
+        'formConfig' => ['showLabels' => false,'labelSpan'=>2, 'deviceSize'=>ActiveForm::SIZE_LARGE]
     ]); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <div class="form-group kv-fieldset-inline">
+        <?= Html::activeLabel($model, 'id_category', [
+            'label'=>'Kategoria', 
+            'class'=>'col-sm-1 control-label'
+        ]); ?>
+        <div class="col-sm-2">
+            <?= $form->field($model, 'id_category')->dropDownList( $categories ) ?>
+        </div>
+        <?= Html::activeLabel($model, 'name', [
+            'label'=>'Zapisane wnioski', 
+            'class'=>'col-sm-1 control-label'
+        ]); ?>
+        <div class="col-sm-8">
+            <?= $form->field($model, 'name')->dropDownList( $insights  ) ?>
+        </div>
+    </div>
+    <div class="form-group kv-fieldset-inline">
+        <?= Html::activeLabel($model, 'id_category', [
+            'label'=>'Szpital', 
+            'class'=>'col-sm-1 control-label'
+        ]); ?>
+        <div class="col-sm-2">
+            <?= $form->field($model, 'hospitals')->textInput() ?>
+        </div>
+        <?= Html::activeLabel($model, 'id_category', [
+            'label'=>'Oddział', 
+            'class'=>'col-sm-1 control-label'
+        ]); ?>
+        <div class="col-sm-2">
+            <?= $form->field($model, 'units')->textInput() ?>
+        </div>
+        <?= Html::activeLabel($model, 'id_category', [
+            'label'=>'Specjalność', 
+            'class'=>'col-sm-1 control-label'
+        ]); ?>
+        <div class="col-sm-2">
+            <?= $form->field($model, 'specialities')->textInput() ?>
+        </div>
+    </div>
+    <div class="form-group kv-fieldset-inline">
 
-    <?= $form->field($model, 'id_category')->dropDownList( Categories::find()->select(['name', 'id'])->indexBy('id')->column()) ?>
-
-    <?= $form->field($model, 'priority')->widget(TouchSpin::className(), [
-    	'pluginOptions' => ['min' => 0, 'max' => 5, 'step' => 1, 'initval' => '0']
-    ]) ?>
-
-    <?php foreach (IndicatorNames::find()->select(['indicator', 'name'])->all() as $indicator): 
-    	// $model->{$indicator->indicator} = 'null';
+    <?php foreach ($indicatorNames as $indicator): 
+    ?>
+        <?= $counter%3 == 0 ? '</div><div class="form-group kv-fieldset-inline">' : ''?>
+        <?= Html::activeLabel($model, 'id_category', [
+            'label'=>$indicator->indicator->name, 
+            'class'=>'col-sm-2 control-label'
+        ]); ?>
+        <div class="col-sm-2">
+            <?= $form->field($model, $indicator->indicator->indicator)
+                ->radioButtonGroup($items, ['class' => 'btn-group-xs']); ?>
+        </div>
+    <?php         
+        ++$counter;
+        endforeach; 
     ?>
 
-	<?= $form->field($model, $indicator->indicator, ['showLabels' => true])->radioButtonGroup($items, ['class' => 'btn-group-xs'])->label($indicator->name); ?>
+    </div>
 
-    <?php endforeach; ?>
+    <div class="panel panel-info">
+      <div class="panel-heading">Podgląd całego wniosku:</div>
+      <div class="panel-body"  id="insightsdef-content">
+        
+      </div>
+    </div>
+
+    <div class="panel panel-success">
+      <div class="panel-heading">Treść aktywnego wniosku:</div>
+      <div class="panel-body">
+        <?= $form->field($content, 'content')->textarea() ?>
+        
+      </div>
+    </div>
+
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Utwórz' : 'Aktualizuj', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
