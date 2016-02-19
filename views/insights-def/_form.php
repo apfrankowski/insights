@@ -96,6 +96,7 @@ $counter = 0;
     <div class="panel panel-success">
       <div class="panel-heading">Treść aktywnego wniosku:</div>
       <div class="panel-body">
+        <?= $form->field($content, 'id')->hiddenInput() ?>
         <?= $form->field($content, 'content')->textarea() ?>
         
       </div>
@@ -103,7 +104,10 @@ $counter = 0;
 
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Utwórz' : 'Aktualizuj', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::button('Utwórz', ['class' => 'btn btn-success', 'id' => 'insightsdef-submit_button']) ?>
+        <?= Html::button('Aktualizuj', ['class' => 'btn btn-primary', 'id' => 'insightsdef-update_button', 'disabled' => 'disabled']) ?>
+        <?= Html::button('Wyczyść', ['class' => 'btn btn-warning', 'id' => 'insightsdef-reset_button']) ?>
+        <?= Html::button('Usuń', ['class' => 'btn btn-danger', 'id' => 'insightsdef-delete_button', 'disabled' => 'disabled']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

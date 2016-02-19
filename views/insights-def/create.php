@@ -6,8 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\InsightsDef */
 
-$this->title = 'Tworzenie definicji wniosku';
-$this->params['breadcrumbs'][] = ['label' => 'Definicje wniosków', 'url' => ['index']];
+$this->title = 'Definicje wniosków';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="insights-def-create">

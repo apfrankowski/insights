@@ -37,7 +37,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-left'],
         'items' => [
-            ['label' => 'Wnioski', 'url' => ['/insights-def/index']],
+            ['label' => 'Wnioski', 'url' => ['/insights-def/create']],
         ]
     ]);
     if ( Yii::$app->user->isGuest ) {

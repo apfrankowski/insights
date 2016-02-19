@@ -63,36 +63,43 @@ class InsightsDefController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($idCategory = 4)
+    public function actionCreate($idCategory = 4, $id = 0)
     {
         $model = new InsightsDef();
         $content = new InsightsContent();
-        $categories = Categories::find()->select(['name', 'id'])->indexBy('id')->column();
-        // $selectedCategory = array_keys($categories)[1];
-        $indicatorNames = CategoriesIndicators::find()->where('id_categories = '.$idCategory)->all();
+
+        $model->name = $id;
         $model->id_category = $idCategory;
 
-        $insights = InsightsDef::find()->where('id_category = '.$idCategory)->all();
-        $insightsCollection = [0 => ''];
-        foreach ($insights as $insight) {
-            $name = '';
-            foreach ($insight->toArray() as $key=>$value) {
-                if (!in_array($key, ['id', 'id_category', 'priority', 'hospitals', 'units', 'specialities']) && $value !== null) {
-                    $name .= $key.'('.$value.')';
+        if ($model->load(Yii::$app->request->post())) {
+            $priorityCounter = 0;
+            foreach (Yii::$app->request->post()['InsightsDef'] as $key => $value) {
+                if (!in_array($key, ['id', 'id_category', 'priority', 'hospitals', 'units', 'specialities', 'name']) && $value != '') {
+                    $priorityCounter++;
                 }
             }
-            $insightsCollection[$insight->id] = $name;
-        }
-
-
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->priority = $priorityCounter;
+            $model->save();
             $content->id_insights_def = $model->id;
             $content->content = Yii::$app->request->post()['InsightsContent']['content'];
             $content->lang = 'pl';
             $content->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['create', 'idCategory' => $model->id_category, 'id' => $model->id]);
         } else {
+            $categories = Categories::find()->select(['name', 'id'])->indexBy('id')->column();
+            $indicatorNames = CategoriesIndicators::find()->where('id_categories = '.$idCategory)->all();
+
+            $insights = InsightsDef::find()->where('id_category = '.$idCategory)->all();
+            $insightsCollection = [0 => ''];
+            foreach ($insights as $insight) {
+                $name = '';
+                foreach ($insight->toArray() as $key=>$value) {
+                    if (!in_array($key, ['id', 'id_category', 'priority', 'hospitals', 'units', 'specialities']) && $value !== null) {
+                        $name .= $key.'('.$value.')';
+                    }
+                }
+                $insightsCollection[$insight->id] = $name;
+            }
             return $this->render('create', [
                 'model' => $model,
                 'content' => $content,
@@ -127,17 +134,26 @@ class InsightsDefController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate()
     {
-        $model = $this->findModel($id);
+        $post = Yii::$app->request->post();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        $model = $this->findModel($post['InsightsDef']['name']);
+        $content = InsightsContent::findOne($post['InsightsContent']['id']);
+
+        if ($model->load($post)) {
+            $priorityCounter = 0;
+            foreach ($post['InsightsDef'] as $key => $value) {
+                if (!in_array($key, ['id', 'id_category', 'priority', 'hospitals', 'units', 'specialities', 'name']) && $value != '') {
+                    $priorityCounter++;
+                }
+            }
+            $model->priority = $priorityCounter;
+            $model->save();
+            $content->load($post);
+            $content->save();
         }
+        return $this->redirect(['create', 'idCategory' => $model->id_category, 'id' => $model->id]);
     }
 
     /**
@@ -146,11 +162,14 @@ class InsightsDefController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete()
     {
-        $this->findModel($id)->delete();
+        $post = Yii::$app->request->post();
 
-        return $this->redirect(['index']);
+        InsightsContent::findOne($post['InsightsContent']['id'])->delete();
+        $this->findModel($post['InsightsDef']['name'])->delete();
+
+        return $this->redirect(['create']);
     }
 
     /**

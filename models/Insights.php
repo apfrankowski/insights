@@ -25,7 +25,7 @@ class Insights extends Model
 		foreach ($indicators as $key=>$value) {
 			array_push($whereArray, ['or', "$key = $value", "$key IS NULL"]);
 		}
-		if ($insights = InsightsDef::find()->where($whereArray)->all()) {
+		if ($insights = InsightsDef::find()->where($whereArray)->orderBy('priority')->all()) {
 			foreach ($insights as $insight) {
 				foreach ($insight->content as $insightLine) {
 					array_push ($this->insightsArray, Insights::_evaluateIndicators($insightLine->content, $hospitalIndicators));

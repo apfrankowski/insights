@@ -17,9 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php foreach ($insights->insightsArray as $key=>$content):?>
 
-        <p>
-        <?=  $content;?>
-        </p>
+        <?=  $content;?> 
 
     <?php endforeach;?>
 
